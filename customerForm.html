@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <!-- jquery cdn -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- custoom js -->
+    <script src="./js/custom.js"></script>
+  </head>
+  <body>
+    <div class="max-width">
+      <!-- left content -->
+      <div class="list-group">
+        <a href="index.html" class="list-group-item">Manage Customer</a>
+        <a href="#" class="list-group-item">Sales</a>
+        <a href="#" class="list-group-item">Sales Admin</a>
+      </div>
+
+      <!-- <div id="formError" class="alert alert-danger" style="display: none">
+        Please fill in all required fields marked with *
+      </div> -->
+      <div style="border: 1px solid #3a9eb8; width: 100%">
+        <p
+          class="mt-4"
+          style="padding: 10px; background-color: #3a9eb8; color: white"
+        >
+          Add Customer
+        </p>
+        <form id="fullForm" class="form-horizontal" style="padding: 10px">
+          <div class="">
+            <!-- Name & Mobile -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name" class="control-label col-sm-2">
+                    Name:<span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-10">
+                    <input
+                      type="text"
+                      id="name"
+                      placeholder="Name"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="mobile" class="control-label col-sm-2">
+                    Mobile:<span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-10">
+                    <input
+                      type="text"
+                      id="mobile"
+                      placeholder="Mobile Number"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TIN & BIN -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="tin" class="control-label col-sm-2">
+                    TIN:<span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-10">
+                    <input
+                      type="text"
+                      id="tin"
+                      placeholder="TIN"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="bin" class="control-label col-sm-2">
+                    BIN:<span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-10">
+                    <input
+                      type="text"
+                      id="bin"
+                      placeholder="BIN"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email + Status  |  Address -->
+            <div class="row">
+              <!-- LEFT column: Email + Status stacked -->
+              <div class="col-md-6">
+                <!-- Email -->
+                <div class="form-group">
+                  <label for="email" class="control-label col-sm-2"
+                    >Email:</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="Email"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-group">
+                  <label for="status" class="control-label col-sm-2"
+                    >Status:</label
+                  >
+                  <div class="col-sm-10">
+                    <select id="status" class="form-control">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RIGHT column: Address -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="address" class="control-label col-sm-2"
+                    >Address:</label
+                  >
+                  <div class="col-sm-10">
+                    <textarea
+                      id="address"
+                      rows="3"
+                      placeholder="Address"
+                      class="form-control"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- table -->
+            <div>
+              <h5 class="mt-4">Discount</h5>
+              <table class="table table-bordered" id="dateTable">
+                <thead>
+                  <tr>
+                    <th style="width: 50px">Sl</th>
+                    <th>Effective Date</th>
+                    <th>Closing Date</th>
+                    <th>Percentage</th>
+                    <th style="width: 100px">
+                      <button type="button" class="btn btn-primary" id="addRow">
+                        +
+                      </button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dynamic Rows Here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <textarea
+            class="form-control"
+            placeholder="Payment must be made with Banking channel only"
+            rows="2"
+          ></textarea>
+
+          <div
+            class=""
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 50px 0;
+            "
+          >
+            <button type="submit" class="btn common-button">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
