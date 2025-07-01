@@ -186,7 +186,7 @@ $(document).ready(function () {
     window.location.href = "index.html";
   });
   //  error removal
-  $("#fullForm  ").on("input", function () {
+  $("#fullForm  input").on("input", function () {
     const $input = $(this);
     if ($input.val().trim() !== "") {
       $input.closest(".form-group").removeClass("has-error");
