@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <!-- bootstrap3 -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+
+    <!-- jquery cdn -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Bootstrap 3 JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap.min.js"></script>
+
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- custoom js -->
+    <script src="./js/custom.js"></script>
+  </head>
+  <body>
+    <div class="max-width">
+      <!-- left content -->
+      <div class="list-group">
+        <a href="index.html" class="list-group-item">Manage Customer</a>
+        <a href="salesDashboard.html" class="list-group-item">Sales</a>
+        <a href="#" class="list-group-item">Sales Admin</a>
+      </div>
+
+      <!-- right content -->
+
+      <div>
+        <a
+          href="addBook.html"
+          class="btn"
+          style="background-color: #3a9eb8; color: white; margin-bottom: 15px"
+          >Add New</a
+        >
+        <div style="border: 1px solid #3a9eb8; width: 100%">
+          <p
+            class="mt-4"
+            style="padding: 10px; background-color: #3a9eb8; color: white"
+          >
+            Manage Book/Materials Sales
+          </p>
+          <form id="fullForm" class="form-horizontal" style="padding: 10px">
+            <div class="">
+              <!-- Customer  -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="name" class="control-label col-sm-3">
+                      Organization:
+                    </label>
+                    <div class="col-sm-9">
+                      <select name="" id="customer" class="form-control">
+                        <option value="">--search--</option>
+                        <option value="Udvash" discount="15">Udvash</option>
+                        <option value="Unmesh" discount="20">Unmesh</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="mobile" class="control-label col-sm-3">
+                      Program:
+                    </label>
+                    <div class="col-sm-9">
+                      <select name="" id="customer" class="form-control">
+                        <option value="">--Select All--</option>
+                        <option value="Udvash" discount="15">Udvash</option>
+                        <option value="Unmesh" discount="20">Unmesh</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Session & Program -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tin" class="control-label col-sm-3">
+                      Session:
+                    </label>
+                    <div class="col-sm-9">
+                      <select name="" id="organization" class="form-control">
+                        <option value="">--Select All--</option>
+                        <option value="Udvash">Udvash</option>
+                        <option value="Unmesh">Unmesh</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bin" class="control-label col-sm-3">
+                      Material Types:
+                    </label>
+                    <div class="col-sm-9">
+                      <select name="" id="program" class="form-control">
+                        <option value="">--Select All--</option>
+                        <option value="HSC">HSC</option>
+                        <option value="SSC">SSC</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- customer & sales date -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tin" class="control-label col-sm-3">
+                      Customer:
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bin" class="control-label col-sm-3">
+                      Search By:
+                    </label>
+                    <div class="col-sm-9">
+                      <select name="" id="material" class="form-control">
+                        <option value=" Sales date">Sales date</option>
+                        <option value="cBook-07">
+                          Chemistry Practice Book-07
+                        </option>
+                        <option value="cBook-08">
+                          Chemistry Practice Book-08
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- sales date and total amount -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tin" class="control-label col-sm-3">
+                      Date From:
+                    </label>
+                    <div class="col-sm-9">
+                      <input
+                        type="date"
+                        id="tin"
+                        placeholder="TIN"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tin" class="control-label col-sm-3">
+                      Date To:
+                    </label>
+                    <div class="col-sm-9">
+                      <input
+                        type="date"
+                        id="tin"
+                        placeholder="TIN"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- invoice no and keyword -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tin" class="control-label col-sm-3">
+                      Invoice No.
+                    </label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        id="Enter Invoice No."
+                        placeholder="TIN"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bin" class="control-label col-sm-3">
+                      Keyword
+                    </label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        id="discount"
+                        placeholder="User Email"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- grand total -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bin" class="control-label col-sm-3">
+                      Grand Total:
+                    </label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        id="bin"
+                        placeholder="BDT"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <!-- <div class="form-group">
+                        <label for="tin" class="control-label col-sm-2">
+                          TIN:<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            type="text"
+                            id="tin"
+                            placeholder="TIN"
+                            class="form-control"
+                          />
+                        </div>
+                      </div> -->
+                </div>
+              </div>
+            </div>
+
+            <div
+              class=""
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 50px 0;
+              "
+            >
+              <button type="submit" class="btn common-button">Submit</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="data-table-container">
+          <p
+            class="mt-4"
+            style="padding: 10px; background-color: #3a9eb8; color: white"
+          >
+            Manage Customer
+          </p>
+          <div class="row filter" style="margin-bottom: 15px">
+            <div class="col-sm-3">
+              <input
+                type="text"
+                id="filterKeyword"
+                class="form-control"
+                placeholder="Search keyword"
+              />
+            </div>
+            <div class="col-sm-3">
+              <select id="filterStatus" class="form-control">
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <input
+                type="text"
+                id="filterTIN"
+                class="form-control"
+                placeholder="TIN or Mobile"
+              />
+            </div>
+            <div class="col-sm-3">
+              <button
+                id="applyFilter"
+                class="btn btn-block"
+                style="background-color: #3a9eb8"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+          <div class="" style="overflow-x: scroll; padding: 10px">
+            <table
+              id="customerTable"
+              class="table table-striped table-bordered"
+              style="width: 100%"
+            >
+              <thead>
+                <tr>
+                  <th>Sl</th>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>TIN</th>
+                  <th>BIN</th>
+                  <th>Status</th>
+                  <th>Effective</th>
+                  <th>Closing</th>
+                  <th>Action</th>
+                  <!-- This will be fixed -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Mahmudul</td>
+                  <td>01784373504</td>
+                  <td>42343</td>
+                  <td>343546</td>
+                  <td>ACtive</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

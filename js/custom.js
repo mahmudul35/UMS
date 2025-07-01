@@ -1,10 +1,12 @@
-// function initializeDatepicker(element) {
-//   element.datepicker({
-//     format: "mm/dd/yyyy",
-//     autoclose: true,
-//     todayHighlight: true,
-//   });
-// }
+/*Add‑Row button based  Closing Date */
+function toggleAddRowButton() {
+  const lastClosing = $("#dateTable tbody tr:last .closing-date").val().trim();
+  if (lastClosing === "") {
+    $("#addRow").hide();
+  } else {
+    $("#addRow").show();
+  }
+}
 
 function updateSerialNumbers() {
   $("#dateTable tbody tr").each(function (index) {
@@ -22,7 +24,7 @@ function addNewRow() {
         <td>
           <div class="date-container">
             <input type="text" class="form-control datepicker effective-date"
-                   placeholder="Effective Date" readonly>
+                   placeholder="Effective Date" >
             <span class="calendar-icon">
               <i class="glyphicon glyphicon-calendar"></i>
             </span>
@@ -32,7 +34,7 @@ function addNewRow() {
         <td>
           <div class="date-container">
             <input type="text" class="form-control datepicker closing-date"
-                   placeholder="Closing Date" readonly>
+                   placeholder="Closing Date" >
             <span class="calendar-icon">
               <i class="glyphicon glyphicon-calendar"></i>
             </span>
@@ -41,8 +43,8 @@ function addNewRow() {
 
         <td>
           <div class="date-container">
-            <input type="text" class="form-control  "
-                   placeholder="" readonly>
+            <input type="text" class="form-control percentage "
+                   placeholder="" >
            
           </div>
         </td>
@@ -57,20 +59,42 @@ function addNewRow() {
 
   $("#dateTable tbody").append(row);
 
-  // Initialise datepicker on the inputs
-  // row.find(".datepicker").datepicker({
-  //   format: "mm/dd/yyyy",
-  //   autoclose: true,
-  //   todayHighlight: true,
-  // });
-
-  // Clicking the icon shows the picker for the sibling input
+  // find datepicker
   row.find(".calendar-icon").on("click", function () {
-    $(this).siblings(".datepicker").datepicker("show");
+    $(this)
+      .siblings(".datepicker")
+      .datepicker({
+        todayBtn: "linked",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayHighlight: true,
+      })
+      .datepicker("show");
   });
 
-  // initializeDatepicker(row.find(".datepicker"));
+  //Closing Date toggle Add‑Row
+  row.find(".closing-date").on("change", toggleAddRowButton);
+
+  row.find(".effective-date").on("change", function () {
+    const $percentage = row.find(".percentage");
+    const hasEff = $(this).val().trim() !== "";
+
+    // enable require percentage
+    $percentage.prop({ disabled: !hasEff, required: hasEff });
+
+    //  effective date chosen and percentage empty
+    const needError = hasEff && $percentage.val().trim() === "";
+    if (needError) {
+      $percentage.addClass("has-error");
+    }
+
+    $("#fullForm").on("input", $percentage, function (e) {
+      $percentage.removeClass("has-error");
+    });
+  });
+
   updateSerialNumbers();
+  toggleAddRowButton();
 }
 
 $(document).ready(function () {
@@ -83,19 +107,29 @@ $(document).ready(function () {
     updateSerialNumbers();
   });
 
-  // Add one initial row
+  // initial row
   addNewRow();
 
-  // Optional: Form submission handler
+  // Form submission
   $("#fullForm").on("submit", function (e) {
     e.preventDefault();
 
     // required input selectors
-    const requiredFields = ["#name", "#mobile", "#tin", "#bin"];
+    const requiredFields = ["#name", "#tin", "#bin"];
+    const bdPhonePattern = /^(?:\+88|88)?01[3-9]\d{8}$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     let isValid = true;
 
-    //  error message
-    $("#formError").hide();
+    //check bd phone number
+    if (!bdPhonePattern.test($("#mobile").val())) {
+      $("#mobile").closest(".form-group").addClass("has-error");
+      isValid = false;
+    }
+    //check valid email
+    if (!emailPattern.test($("#email").val())) {
+      $("#email").closest(".form-group").addClass("has-error");
+      isValid = false;
+    }
 
     // Check each required field
     requiredFields.forEach(function (selector) {
@@ -103,31 +137,59 @@ $(document).ready(function () {
       const value = $input.val().trim();
 
       if (value === "") {
-        // Add red border (Bootstrap way)
         $input.closest(".form-group").addClass("has-error");
         isValid = false;
       } else {
-        // Remove error style if filled
         $input.closest(".form-group").removeClass("has-error");
       }
     });
 
+    //date select logic
+    $("#dateTable tbody tr").each(function () {
+      const effectiveDate = $(this).find(".effective-date").val().trim();
+      const percentage = $(this).find(".percentage").val().trim();
+      if (effectiveDate !== "" && perc === "") {
+        $(this).find(".percentage").addClass("has-error");
+        isValid = false;
+      } else {
+        $(this).find(".percentage").removeClass("has-error");
+      }
+    });
+
     if (!isValid) {
-      $("#formError").fadeIn();
-      return; // Stop submission
+      return;
     }
 
-    alert("Form submitted successfully!");
-    // Continue with AJAX or actual form submission...
-  });
+    let customer = [];
 
-  // Optional: live error removal on typing
-  $("#fullForm input").on("input", function () {
+    const existingValue = JSON.parse(sessionStorage.getItem("customer"));
+    if (existingValue) {
+      customer.push(existingValue);
+    }
+
+    console.log(customer);
+
+    const customerData = {
+      name: $("#name").val(),
+      mobile: $("#mobile").val(),
+      tin: $("#tin").val(),
+      bin: $("#bin").val(),
+      email: $("#email").val(),
+      address: $("#address").val(),
+      status: $("#status").val(),
+      effDate: $(".effective-date").val(),
+      closeDate: $(".closing-date").val(),
+    };
+    customer.push(customerData);
+    const data = sessionStorage.setItem("customer", JSON.stringify(customer));
+
+    window.location.href = "index.html";
+  });
+  //  error removal
+  $("#fullForm  ").on("input", function () {
     const $input = $(this);
     if ($input.val().trim() !== "") {
       $input.closest(".form-group").removeClass("has-error");
     }
   });
 });
-
-//custom function
