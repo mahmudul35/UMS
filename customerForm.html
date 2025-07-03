@@ -62,11 +62,17 @@
                   </label>
                   <div class="col-sm-10">
                     <input
-                      type="text"
+                      type="number"
+                      maxlength="13"
+                      minlength="11"
                       id="mobile"
-                      placeholder="Mobile Number"
+                      pattern="^(8801[3-9][0-9]{8}|01[3-9][0-9]{8})$"
+                      placeholder="+8801XXXXXXXXX"
                       class="form-control"
                     />
+                    <span style="color: red; display: none"
+                      >Number is required</span
+                    >
                   </div>
                 </div>
               </div>

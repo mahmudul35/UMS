@@ -6,13 +6,21 @@
     <title>Document</title>
 
     <link rel="stylesheet" href="./css/style.css" />
-
+    <link rel="stylesheet" href="./css/addBook.css" />
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
     />
     <!-- jquery cdn -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- select2 plugin -->
+    <!-- Select2 CSS + JS (copy exactly, no [] brackets) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Datepicker JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -42,6 +50,7 @@
         <form id="fullForm" class="form-horizontal" style="padding: 10px">
           <div class="">
             <!-- Customer  -->
+
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -49,10 +58,14 @@
                     Customer:<span class="text-danger">*</span>
                   </label>
                   <div class="col-sm-9">
-                    <select name="" id="customer" class="form-control">
-                      <option value="">--search--</option>
-                      <option value="Mahmudul" discount="15">Mahmudul</option>
-                      <option value="Hasan" discount="20">Hasan</option>
+                    <select id="customer" class="form-control">
+                      <option value=""></option>
+                      <option value="Mahmudul" data-discount="15">
+                        Mahmudul
+                      </option>
+                      <option value="Hasan" data-discount="20">Hasan</option>
+                      <option value="Rasel" data-discount="10">Rasel</option>
+                      <option value="Rifat" data-discount="5">Rifat</option>
                     </select>
                   </div>
                 </div>
@@ -92,7 +105,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
+              <!-- <div class="col-md-6">
                 <div class="form-group">
                   <label for="bin" class="control-label col-sm-3">
                     Program:<span class="text-danger">*</span>
@@ -105,11 +118,11 @@
                     </select>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <!-- Session & Material -->
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="tin" class="control-label col-sm-3">
@@ -143,24 +156,51 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- table start -->
-            <div>
+            <div class="table-responsive">
               <table class="table" id="dateTable">
                 <thead>
                   <tr>
-                    <th>Materials <span class="text-danger">*</span></th>
-                    <th>Rate</th>
-                    <th>Quantity <span class="text-danger">*</span></th>
-                    <th>Amount</th>
-                    <th style="width: 100px">
+                    <th rowspan="2">
+                      Program <span class="text-danger">*</span>
+                    </th>
+                    <th rowspan="2">
+                      Session <span class="text-danger">*</span>
+                    </th>
+                    <th rowspan="2">
+                      Materials Type<span class="text-danger">*</span>
+                    </th>
+                    <th rowspan="2">
+                      Materials <span class="text-danger">*</span>
+                    </th>
+                    <th rowspan="2">Rate</th>
+                    <th rowspan="2">
+                      Quantity <span class="text-danger">*</span>
+                    </th>
+                    <th rowspan="2">Amount</th>
+
+                    <!-- Grouped Header -->
+                    <th colspan="2" class="text-center discount-header">
+                      Discount
+                    </th>
+
+                    <th rowspan="2">Net Amount</th>
+                    <th rowspan="2" style="width: 100px">
                       <button type="button" class="btn btn-primary" id="addRow">
                         +
                       </button>
                     </th>
                   </tr>
+
+                  <!-- Sub-Headers -->
+                  <tr>
+                    <th>Regular (%)</th>
+                    <th>Special (BDT)</th>
+                  </tr>
                 </thead>
+
                 <tbody></tbody>
               </table>
             </div>
@@ -174,7 +214,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="tin" class="control-label col-sm-4">
-                    Sales Date:<span class="text-danger">*</span>
+                    Sales Date:
                   </label>
                   <div class="col-sm-8">
                     <input type="date" id="salesDate" class="form-control" />
@@ -221,7 +261,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="bin" class="control-label col-sm-4">
-                    Discount(10%):
+                    Regular Discount:
                   </label>
                   <div class="col-sm-8">
                     <input
@@ -256,15 +296,52 @@
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="bin" class="control-label col-sm-4">
+                  <label for="grand" class="control-label col-sm-4">
+                    Special Total:
+                  </label>
+                  <div class="col-sm-8">
+                    <input
+                      type="number"
+                      id="specialTotal"
+                      placeholder="BDT"
+                      class="form-control"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- grand total -->
+            <div class="row">
+              <div class="col-md-6">
+                <!-- <div class="form-group">
+                    <label for="tin" class="control-label col-sm-2">
+                      TIN:<span class="text-danger">*</span>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="tin"
+                        placeholder="TIN"
+                        class="form-control"
+                      />
+                    </div>
+                  </div> -->
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="grand" class="control-label col-sm-4">
                     Grand Total:
                   </label>
                   <div class="col-sm-8">
                     <input
-                      type="text"
-                      id="bin"
+                      type="number"
+                      id="grandTotal"
                       placeholder="BDT"
                       class="form-control"
+                      readonly
                     />
                   </div>
                 </div>

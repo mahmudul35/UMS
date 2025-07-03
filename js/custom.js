@@ -19,36 +19,37 @@ function updateSerialNumbers() {
 function addNewRow() {
   const row = $(`
       <tr>
-        <td></td>
-  
+        <td></td> 
+
         <td>
           <div class="date-container">
             <input type="text" class="form-control datepicker effective-date"
-                   placeholder="Effective Date" >
+                   placeholder="Effective Date">
             <span class="calendar-icon">
               <i class="glyphicon glyphicon-calendar"></i>
             </span>
           </div>
-        </td>
-  
-        <td>
-          <div class="date-container">
-            <input type="text" class="form-control datepicker closing-date"
-                   placeholder="Closing Date" >
-            <span class="calendar-icon">
-              <i class="glyphicon glyphicon-calendar"></i>
-            </span>
-          </div>
+          <div class="error-message" style="color:red; font-size:0.9em;"></div>
         </td>
 
         <td>
           <div class="date-container">
-            <input type="text" class="form-control percentage "
-                   placeholder="" >
-           
+            <input type="text" class="form-control datepicker closing-date"
+                   placeholder="Closing Date">
+            <span class="calendar-icon">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </span>
+          </div>
+          <div class="error-message" style="color:red; font-size:0.9em;"></div>
+        </td>
+
+        <td>
+          <div class="date-container">
+            <input type="" class="form-control percentage"
+                   placeholder="" disabled>
           </div>
         </td>
-  
+
         <td>
           <button type="button" class="btn btn-danger btn-sm removeRow">
             -
@@ -59,56 +60,104 @@ function addNewRow() {
 
   $("#dateTable tbody").append(row);
 
-  // find datepicker
-  row.find(".calendar-icon").on("click", function () {
-    $(this)
-      .siblings(".datepicker")
-      .datepicker({
-        todayBtn: "linked",
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayHighlight: true,
-      })
-      .datepicker("show");
+  // Initialize datepicker
+  row.find(".datepicker").datepicker({
+    todayBtn: "linked",
+    format: "yyyy-mm-dd",
+    autoclose: true,
+    todayHighlight: true,
   });
 
-  //Closing Date toggle Add‑Row
-  row.find(".closing-date").on("change", toggleAddRowButton);
-
+  // Handle Effective Date change
   row.find(".effective-date").on("change", function () {
     const $percentage = row.find(".percentage");
     const hasEff = $(this).val().trim() !== "";
 
-    // enable require percentage
     $percentage.prop({ disabled: !hasEff, required: hasEff });
 
-    //  effective date chosen and percentage empty
     const needError = hasEff && $percentage.val().trim() === "";
     if (needError) {
       $percentage.addClass("has-error");
     }
 
-    $("#fullForm").on("input", $percentage, function (e) {
-      $percentage.removeClass("has-error");
+    // Remove error on input
+    $percentage.off("input").on("input", function () {
+      $(this).removeClass("has-error");
+      if (isNaN($(this).val().trim()) || $(this).val().trim() === "") {
+        $(this).addClass("has-error");
+        $(this).val("");
+      }
     });
+  });
+
+  // Validate Closing Date >= Effective Date
+  function validateDates(effectiveInput, closingInput, errorDiv) {
+    const effectiveDateStr = effectiveInput.val().trim();
+    const closingDateStr = closingInput.val().trim();
+
+    if (!effectiveDateStr || !closingDateStr) return;
+
+    const effectiveDate = new Date(effectiveDateStr);
+    const closingDate = new Date(closingDateStr);
+
+    if (closingDate < effectiveDate) {
+      closingInput.val("");
+      return false;
+    } else if (effectiveDate > closingDate) {
+      // errorDiv.text("Effective date must be before or same as Closing date.");
+      effectiveInput.val("");
+      return false;
+    }
+  }
+
+  // Handle Closing Date change
+  row.find(".closing-date").on("change", function () {
+    const effectiveInput = row.find(".effective-date");
+    const closingInput = $(this);
+    const errorDiv = row.find(".error-message").eq(1); // second error div
+
+    validateDates(effectiveInput, closingInput, errorDiv);
+    toggleAddRowButton();
+  });
+
+  // Handle Effective Date change (re-check Closing Date)
+  row.find(".effective-date").on("change", function () {
+    const effectiveInput = $(this);
+    const closingInput = row.find(".closing-date");
+    const errorDiv = row.find(".error-message").eq(1);
+
+    validateDates(effectiveInput, closingInput, errorDiv);
+  });
+
+  // Remove Row functionality
+  row.on("click", ".removeRow", function () {
+    if ($("#dateTable tbody tr").length === 1) {
+      $("#addRow").show();
+    }
+    $(this).closest("tr").remove();
+    updateSerialNumbers();
   });
 
   updateSerialNumbers();
   toggleAddRowButton();
 }
-
 $(document).ready(function () {
   $("#addRow").on("click", function () {
     addNewRow();
   });
 
-  $("#dateTable").on("click", ".removeRow", function () {
-    $(this).closest("tr").remove();
-    updateSerialNumbers();
-  });
-
   // initial row
-  addNewRow();
+  // addNewRow();
+
+  $("#mobile").on("input", function () {
+    const value = $(this).val();
+    const bdPhonePattern = /^(?:\+88|88)?01[3-9]\d{8}$/;
+    if (!bdPhonePattern.test(value)) {
+      $(this).closest(".form-group").addClass("has-error");
+    } else {
+      $(this).closest(".form-group").removeClass("has-error");
+    }
+  });
 
   // Form submission
   $("#fullForm").on("submit", function (e) {
@@ -119,10 +168,11 @@ $(document).ready(function () {
     const bdPhonePattern = /^(?:\+88|88)?01[3-9]\d{8}$/;
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     let isValid = true;
-
+    $("#mobile").siblings("span").hide();
     //check bd phone number
     if (!bdPhonePattern.test($("#mobile").val())) {
       $("#mobile").closest(".form-group").addClass("has-error");
+      $("#mobile").siblings("span").show();
       isValid = false;
     }
     //check valid email
@@ -148,7 +198,8 @@ $(document).ready(function () {
     $("#dateTable tbody tr").each(function () {
       const effectiveDate = $(this).find(".effective-date").val().trim();
       const percentage = $(this).find(".percentage").val().trim();
-      if (effectiveDate !== "" && perc === "") {
+
+      if (effectiveDate !== "" && percentage === "") {
         $(this).find(".percentage").addClass("has-error");
         isValid = false;
       } else {
